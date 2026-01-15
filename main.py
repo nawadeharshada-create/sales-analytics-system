@@ -21,28 +21,7 @@ from utils.report_generator import generate_sales_report
 
 
 def main():
-    """
-    Main execution function
-
-    Workflow:
-    1. Print welcome message
-    2. Read sales data file (handle encoding)
-    3. Parse and clean transactions
-    4. Display filter options to user
-    5. Apply optional filtering
-    6. Validate transactions
-    7. Display validation summary
-    8. Perform all data analyses (Part 2)
-    9. Fetch products from API
-    10. Enrich sales data with API info
-    11. Save enriched data to file
-    12. Generate comprehensive report
-    13. Print success message with file locations
-
-    Error Handling:
-    - Wrap entire process in try-except
-    """
-
+   
     try:
         print("=" * 40)
         print("SALES ANALYTICS SYSTEM")
@@ -54,9 +33,9 @@ def main():
         print("\n[1/10] Reading sales data...")
         raw_lines = read_sales_data("data/sales_data.txt")
         if not raw_lines:
-            print("✗ No data read. Please check file path or file content.")
+            print("No data read. Please check file path or file content.")
             return
-        print(f"✓ Successfully read {len(raw_lines)} raw lines")
+        print(f"Successfully read {len(raw_lines)} raw lines")
 
         # -----------------------------
         # [2/10] Parse & clean
@@ -64,9 +43,9 @@ def main():
         print("\n[2/10] Parsing and cleaning data...")
         transactions = parse_transactions(raw_lines)
         if not transactions:
-            print("✗ No valid transactions after parsing. Please check file format.")
+            print("No valid transactions after parsing. Please check file format.")
             return
-        print(f"✓ Parsed {len(transactions)} records")
+        print(f"Parsed {len(transactions)} records")
 
         # -----------------------------
         # [3/10] Filter options
@@ -103,14 +82,14 @@ def main():
                 try:
                     min_amount = float(min_in)
                 except ValueError:
-                    print("⚠ Invalid min amount. Ignoring min filter.")
+                    print("Invalid min amount. Ignoring min filter.")
                     min_amount = None
 
             if max_in:
                 try:
                     max_amount = float(max_in)
                 except ValueError:
-                    print("⚠ Invalid max amount. Ignoring max filter.")
+                    print("Invalid max amount. Ignoring max filter.")
                     max_amount = None
 
         # -----------------------------
@@ -124,12 +103,12 @@ def main():
             max_amount=max_amount,
         )
 
-        print(f"✓ Valid: {len(valid_transactions)} | Invalid: {invalid_count}")
+        print(f"Valid: {len(valid_transactions)} | Invalid: {invalid_count}")
         if filter_summary:
             print("Filter Summary:", filter_summary)
 
         if not valid_transactions:
-            print("✗ No valid transactions after validation/filtering.")
+            print("No valid transactions after validation/filtering.")
             return
 
         # -----------------------------
@@ -144,14 +123,14 @@ def main():
         trend = daily_sales_trend(valid_transactions)
         low_products = low_performing_products(valid_transactions, threshold=10)
 
-        print("✓ Analysis complete")
+        print("Analysis complete")
 
         # -----------------------------
         # [6/10] Fetch API products
         # -----------------------------
         print("\n[6/10] Fetching product data from API...")
         api_products = fetch_all_products()
-        print(f"✓ Fetched {len(api_products)} products")
+        print(f"Fetched {len(api_products)} products")
 
         # -----------------------------
         # [7/10] Enrich transactions
@@ -163,7 +142,7 @@ def main():
         enriched_count = sum(1 for t in enriched_transactions if t.get("API_Match") is True)
         success_rate = (enriched_count / len(enriched_transactions)) * 100
 
-        print(f"✓ Enriched {enriched_count}/{len(enriched_transactions)} transactions ({success_rate:.1f}%)")
+        print(f"Enriched {enriched_count}/{len(enriched_transactions)} transactions ({success_rate:.1f}%)")
 
         # -----------------------------
         # [8/10] Save enriched file
@@ -171,7 +150,7 @@ def main():
         print("\n[8/10] Saving enriched data...")
         enriched_path = "data/enriched_sales_data.txt"
         save_enriched_data(enriched_transactions, filename=enriched_path)
-        print(f"✓ Saved to: {enriched_path}")
+        print(f"Saved to: {enriched_path}")
 
         # -----------------------------
         # [9/10] Generate report
@@ -183,7 +162,7 @@ def main():
             enriched_transactions=enriched_transactions,
             output_file=report_path,
         )
-        print(f"✓ Report saved to: {report_path}")
+        print(f"Report saved to: {report_path}")
 
         # -----------------------------
         # [10/10] Done
